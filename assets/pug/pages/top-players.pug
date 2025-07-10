@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+  head
+    include ../meta-data/_head.pug
+    title SPL | Top Players
+  body
+    //- NAVBAR -//
+    include ../components/_navbar.pug
+
+    //- LANDING -//
+    section.landing
+      .wallpapers
+        img.wallpaper-img.active(src="../static/images/landing-wallpaper1.png")
+        img.wallpaper-img(src="../static/images/landing-wallpaper2.png")
+        img.wallpaper-img(src="../static/images/landing-wallpaper3.png")
+        img.wallpaper-img(src="../static/images/landing-wallpaper4.png")
+      .overlay
+      .container.d-flex.justify-content-center.align-items-center(style="height: 100vh")
+        .content.d-flex.flex-column.w-100
+          .logo.text-center.mb-4
+            img.main-logo-spin(src="../static/images/logo.png", alt="logo", width="150px")
+          .buttons.d-flex.gap-3.flex-wrap.m-auto.justify-content-center
+            a.btn.btn-primary.btn-lg.fs-5.d-flex.align-items-center.justify-content-center(href="#top-players")
+              i.bi.bi-trophy-fill.pe-3
+              | Top Players
+              i.bi.bi-arrow-down.ps-3
+
+    //- TOP PLAYERS -//
+    section#top-players.container
+      //- will be populated with js
+
+
+    script(src="../node_modules/papaparse/papaparse.min.js") 
+    script(src="../node_modules/axios/dist/axios.min.js") 
+    script(src="../assets/js/main.js") 
+    script(src="../assets/js/top-players.js") 
