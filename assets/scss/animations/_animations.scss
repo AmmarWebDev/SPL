@@ -9,9 +9,6 @@
 
 .main-logo-spin {
   animation: spin 10s linear infinite;
-  &:hover {
-    animation-play-state: paused;
-  }
 }
 
 .navbar-brand-spin {
