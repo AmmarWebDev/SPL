@@ -21,13 +21,19 @@ Promise.all(csvFiles.map(file => axios.get(file)))
         skipEmptyLines: true
       });
 
-      const leagueNameMatch = csvFiles[index].match(/SPL\s.*?(?=\srecords)/);
-      const leagueName = leagueNameMatch ? leagueNameMatch[0] : "Unknown League";
+      const leagueNameMatch = csvFiles[index].match(/SPL\s(.*?)(?=\srecords)/);
+      const leagueName = leagueNameMatch ? leagueNameMatch[1] : "Unknown League";
+
 
       // Create League Title
       const h1 = document.createElement('h1');
       h1.classList.add('text-light', 'text-center', 'mt-5');
-      h1.textContent = leagueName;
+      h1.innerHTML = `
+        <img src="../static/images/${leagueName}-logo.png" width="40px" />
+        <span>SPL ${leagueName}</span>
+        <img src="../static/images/${leagueName}-logo.png" width="40px" />
+      `;
+      console.log(leagueName)
       topPlayersSection.appendChild(h1);
 
       const players = parsed.data.map(player => ({
@@ -48,7 +54,7 @@ Promise.all(csvFiles.map(file => axios.get(file)))
 
       // Generate Goalscorers Table
       const goalsTableHTML = `
-        <h2 class="text-light text-center">Top 10 ${leagueName} Goalscorers</h2>
+        <h2 class="text-light text-center">🏆 Top 10 ${leagueName} Goalscorers 🏆</h2>
         <table class="table table-dark table-striped table-bordered table-hover text-center container my-3">
           <thead>
             <tr>
@@ -69,7 +75,7 @@ Promise.all(csvFiles.map(file => axios.get(file)))
 
       // Generate Assisters Table
       const assistsTableHTML = `
-        <h2 class="text-light text-center">Top 10 ${leagueName} Assisters</h2>
+        <h2 class="text-light text-center">🏆 Top 10 ${leagueName} Assisters 🏆</h2>
         <table class="table table-dark table-striped table-bordered table-hover text-center container my-3">
           <thead>
             <tr>
