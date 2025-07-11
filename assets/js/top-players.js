@@ -29,9 +29,9 @@ Promise.all(csvFiles.map(file => axios.get(file)))
       const h1 = document.createElement('h1');
       h1.classList.add('text-light', 'text-center', 'mt-5');
       h1.innerHTML = `
-        <img src="../static/images/${leagueName}-logo.png" width="40px" />
+        <img src="../static/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
         <span>SPL ${leagueName}</span>
-        <img src="../static/images/${leagueName}-logo.png" width="40px" />
+        <img src="../static/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
       `;
       console.log(leagueName)
       topPlayersSection.appendChild(h1);
