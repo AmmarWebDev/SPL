@@ -4,10 +4,10 @@
 const topPlayersSection = document.getElementById('top-players');
 
 // CHANGE THE NAVBAR UI //
-document.querySelector('.navbar-collapse a[href="index.htm"]')
+document.querySelector('.navbar-collapse a[href="index.html"]')
   .classList.toggle('active');
 
-document.querySelector('.navbar-collapse a[href="top-players.htm"]')
+document.querySelector('.navbar-collapse a[href="top-players.html"]')
   .classList.toggle('active');
 
 // PARSE THE CSV FILES //
