@@ -1,6 +1,6 @@
 "use strict";
 
-// SETUP FIREBASE FOR WEB HOSTING //
+//! SETUP FIREBASE FOR WEB HOSTING //
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
@@ -24,20 +24,22 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 
-// NAVBAR TOGGLER //
+//! NAVBAR TOGGLER //
 const toggler = document.querySelector('.navbar-toggler');
 
-toggler.addEventListener('click', () => {
-  toggler.classList.toggle('open');
-});
+if (toggler) {
+  toggler.addEventListener('click', () => {
+    toggler.classList.toggle('open');
+  });
+}
 
 
-// LANDING WALLPAPERS SWITCH //
+//! LANDING WALLPAPERS SWITCH //
 const images = [
-  '../static/images/landing-wallpaper1.png',
-  '../static/images/landing-wallpaper2.png',
-  '../static/images/landing-wallpaper3.png',
-  '../static/images/landing-wallpaper4.png'
+  'assets/images/landing-wallpaper1.png',
+  'assets/images/landing-wallpaper2.png',
+  'assets/images/landing-wallpaper3.png',
+  'assets/images/landing-wallpaper4.png'
 ];
 
 const [img1, img2] = document.querySelectorAll('.wallpaper-img');
@@ -56,9 +58,11 @@ function changeWallpaper() {
   showingFirst = !showingFirst;
 }
 
-setInterval(changeWallpaper, 5000);
+if (img1 && img2) {
+  setInterval(changeWallpaper, 5000);
+}
 
-// WALLPAPER PARALLAX EFFECT //
+//! WALLPAPER PARALLAX EFFECT //
 const wallpapers = document.querySelectorAll('.wallpaper-img');
 
 let targetX = 0;
@@ -85,4 +89,6 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-animate(); // Start the animation loop
+if (wallpapers) {
+  animate(); // Start the animation loop
+}

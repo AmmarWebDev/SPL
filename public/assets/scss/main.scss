@@ -1,8 +1,5 @@
 @use 'animations/animations';
-
-html {
-  scroll-behavior: smooth;
-}
+@use 'scrollbar';
 
 body {
   background-color: #212529;

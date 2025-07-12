@@ -4,14 +4,14 @@
 const topPlayersSection = document.getElementById('top-players');
 
 // CHANGE THE NAVBAR UI //
-document.querySelector('.navbar a[href="home.htm"]')
+document.querySelector('.navbar-collapse a[href="index.htm"]')
   .classList.toggle('active');
 
-document.querySelector('.navbar a[href="top-players.htm"]')
+document.querySelector('.navbar-collapse a[href="top-players.htm"]')
   .classList.toggle('active');
 
-// PARSE THE CSV FILES
-const csvFiles = ['../database/SPL CWC records.csv', '../database/SPL Euros records.csv'];
+// PARSE THE CSV FILES //
+const csvFiles = ['database/SPL CWC records.csv', 'database/SPL Euros records.csv'];
 
 Promise.all(csvFiles.map(file => axios.get(file)))
   .then(responses => {
@@ -29,11 +29,11 @@ Promise.all(csvFiles.map(file => axios.get(file)))
       const h1 = document.createElement('h1');
       h1.classList.add('text-light', 'text-center', 'mt-5');
       h1.innerHTML = `
-        <img src="../static/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
+        <img src="assets/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
         <span>SPL ${leagueName}</span>
-        <img src="../static/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
+        <img src="assets/images/${leagueName.toLowerCase()}-logo.png" width="40px" />
       `;
-      console.log(leagueName)
+      
       topPlayersSection.appendChild(h1);
 
       const players = parsed.data.map(player => ({

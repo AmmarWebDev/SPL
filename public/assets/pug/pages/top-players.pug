@@ -10,15 +10,15 @@ html(lang="en")
     //- LANDING -//
     section.landing
       .wallpapers
-        img.wallpaper-img.active(src="../static/images/landing-wallpaper1.png", loading="eager")
-        img.wallpaper-img(src="../static/images/landing-wallpaper2.png", loading="eager")
-        img.wallpaper-img(src="../static/images/landing-wallpaper3.png", loading="eager")
-        img.wallpaper-img(src="../static/images/landing-wallpaper4.png", loading="eager")
+        img.wallpaper-img.active(src="assets/images/landing-wallpaper1.png", loading="eager")
+        img.wallpaper-img(src="assets/images/landing-wallpaper2.png", loading="eager")
+        img.wallpaper-img(src="assets/images/landing-wallpaper3.png", loading="eager")
+        img.wallpaper-img(src="assets/images/landing-wallpaper4.png", loading="eager")
       .overlay
       .container.d-flex.justify-content-center.align-items-center(style="height: 100vh")
         .content.d-flex.flex-column.w-100
           .logo.text-center.mb-4
-            img.main-logo-spin(src="../static/images/logo.png", alt="logo", width="150px")
+            img.main-logo-spin(src="assets/images/logo.png", alt="logo", width="150px")
           .buttons.d-flex.gap-3.flex-wrap.m-auto.justify-content-center
             a.btn.btn-primary.btn-lg.fs-5.d-flex.align-items-center.justify-content-center(href="#top-players")
               i.bi.bi-trophy-fill.pe-3
@@ -34,5 +34,5 @@ html(lang="en")
     //- papa parse
     script(src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js")
     //- custom JS 
-    script(src="../assets/js/main.js") 
-    script(src="../assets/js/top-players.js") 
+    script(src="assets/js/main.js", type="module") 
+    script(src="assets/js/top-players.js") 
