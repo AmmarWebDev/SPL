@@ -13,8 +13,8 @@ body {
   border: none;
 }
 
-.table-transparent :is(tbody, thead) tr :is(th, td) {
-  background: none;
+.responsive-text {
+  font-size: clamp(1.4rem, 4vw, 2rem);
 }
 
 .btn {
@@ -26,11 +26,6 @@ body {
 }
 
 .navbar {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 10;
-
   .container {
     position: relative;
 
@@ -83,46 +78,4 @@ body {
       }
     }
   }
-}
-
-.landing {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-
-  .wallpaper-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    z-index: 0;
-    transform: scale(1.1);
-    
-    &.active {
-      opacity: 1;
-      z-index: 1;
-    }
-  }
-
-  .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.4);
-  }
-
-  .content {
-    position: relative;
-    z-index: 3;
-  }
-}
-
-table {
-  max-width: 500px !important;
 }

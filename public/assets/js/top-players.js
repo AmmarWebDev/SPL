@@ -24,7 +24,6 @@ Promise.all(csvFiles.map(file => axios.get(file)))
       const leagueNameMatch = csvFiles[index].match(/SPL\s(.*?)(?=\srecords)/);
       const leagueName = leagueNameMatch ? leagueNameMatch[1] : "Unknown League";
 
-
       // Create League Title
       const h1 = document.createElement('h1');
       h1.classList.add('text-light', 'text-center', 'mt-5');
@@ -54,8 +53,8 @@ Promise.all(csvFiles.map(file => axios.get(file)))
 
       // Generate Goalscorers Table
       const goalsTableHTML = `
-        <h2 class="text-light text-center">🏆 Top 10 ${leagueName} Goalscorers 🏆</h2>
-        <table class="table table-dark table-striped table-bordered table-hover text-center container my-3">
+        <h2 class="text-light text-center responsive-text">🏆 Top 10 ${leagueName} Goalscorers 🏆</h2>
+        <table class="table table-dark table-striped table-bordered table-hover text-center w-100 my-3 mx-auto">
           <thead>
             <tr>
               <th scope="col">Username</th>
@@ -75,8 +74,8 @@ Promise.all(csvFiles.map(file => axios.get(file)))
 
       // Generate Assisters Table
       const assistsTableHTML = `
-        <h2 class="text-light text-center">🏆 Top 10 ${leagueName} Assisters 🏆</h2>
-        <table class="table table-dark table-striped table-bordered table-hover text-center container my-3">
+        <h2 class="text-light text-center responsive-text">🏆 Top 10 ${leagueName} Assisters 🏆</h2>
+        <table class="table table-dark table-striped table-bordered table-hover text-center w-100 my-3 mx-auto">
           <thead>
             <tr>
               <th scope="col">Username</th>
@@ -94,8 +93,19 @@ Promise.all(csvFiles.map(file => axios.get(file)))
         </table>
       `;
 
-      // Combine and append
-      const combinedHTML = goalsTableHTML + assistsTableHTML;
+      // Combine tables in responsive Bootstrap row
+      const combinedHTML = `
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            ${goalsTableHTML}
+          </div>
+          <div class="col-12 col-lg-6">
+            ${assistsTableHTML}
+          </div>
+        </div>
+      `;
+
+      // Append to topPlayersSection
       topPlayersSection.innerHTML += combinedHTML;
 
       // Add <hr> after each league except the last
