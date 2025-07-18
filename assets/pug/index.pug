@@ -1,13 +1,13 @@
 doctype html
 html(lang="en")
   head
-    include ../meta-data/_head.pug
+    include meta-data/_head.pug
     title SPL | Home
     //- custom CSS
     link(rel="stylesheet", href="assets/css/index.min.css")
-  body
+  body(data-bs-theme="dark")
     //- NAVBAR -//
-    include ../components/_navbar.pug
+    include components/_navbar.pug
 
     //- LANDING -//
     section.landing
@@ -31,4 +31,6 @@ html(lang="en")
               | SPL Hub
               i.bi.bi-box-arrow-up-right.ps-3
 
-    script(src="assets/js/main.js", type="module")
+    //- custom JS
+    script(src="assets/js/index.min.js", type="module")
+    script(src="assets/js/main.min.js", type="module")

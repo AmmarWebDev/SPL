@@ -1,39 +1,5 @@
 "use strict";
 
-//! SETUP FIREBASE FOR WEB HOSTING //
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDtOrRArWN8iQ_EuxCFeFY51nobit_tV3o",
-  authDomain: "spl-league.firebaseapp.com",
-  projectId: "spl-league",
-  storageBucket: "spl-league.firebasestorage.app",
-  messagingSenderId: "608837132898",
-  appId: "1:608837132898:web:20aadea03ff556379aa73b",
-  measurementId: "G-DLD33E023P"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-
-//! NAVBAR TOGGLER //
-const toggler = document.querySelector('.navbar-toggler');
-
-if (toggler) {
-  toggler.addEventListener('click', () => {
-    toggler.classList.toggle('open');
-  });
-}
-
-
 //! LANDING WALLPAPERS SWITCH //
 const images = [
   'assets/images/landing-wallpaper1.png',
@@ -71,7 +37,7 @@ let currentX = 0;
 let currentY = 0;
 const depth = 0.025; // You already had 0.05 / 2
 
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', e => {
   // Calculate desired position based on cursor location
   targetX = (window.innerWidth / 2 - e.clientX) * depth;
   targetY = (window.innerHeight / 2 - e.clientY) * depth;
@@ -89,6 +55,4 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-if (wallpapers) {
-  animate(); // Start the animation loop
-}
+animate(); // Start the animation loop
