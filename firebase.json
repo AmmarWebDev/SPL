@@ -75,6 +75,16 @@
           }
         ]
       }
+    ],
+    "rewrites": [
+      {
+        "source": "/rule-book",
+        "destination": "/rule-book.html"
+      },
+      {
+        "source": "/top-players",
+        "destination": "/top-players.html"
+      }
     ]
   }
 }

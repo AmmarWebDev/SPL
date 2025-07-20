@@ -12,10 +12,19 @@ html(lang="en")
     //- LANDING -//
     section.landing
       .wallpapers
-        img.wallpaper-img.active(src="assets/images/landing-wallpaper1.png", loading= "eager")
-        img.wallpaper-img(src="assets/images/landing-wallpaper2.png", loading= "eager")
-        img.wallpaper-img(src="assets/images/landing-wallpaper3.png", loading= "eager")
-        img.wallpaper-img(src="assets/images/landing-wallpaper4.png", loading= "eager")
+        picture.wallpaper-img.active
+          source(srcset="assets/images/landing-wallpaper1.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper1.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper1.jpg", alt="Wallpaper 1", loading="eager")
+        picture.wallpaper-img
+          source(srcset="assets/images/landing-wallpaper2.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper2.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper2.jpg", alt="Wallpaper 2", loading="lazy")
+        picture.wallpaper-img
+          source(srcset="assets/images/landing-wallpaper3.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper3.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper3.jpg", alt="Wallpaper 3", loading="lazy")
+
       .overlay
       .container.d-flex.justify-content-center.align-items-center(style="height: 100vh")
         .content.d-flex.flex-column.w-100
