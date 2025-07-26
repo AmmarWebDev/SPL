@@ -1,6 +1,6 @@
 # Frontend–Backend Integration: Match Stats Update System
 
-Hey [name], here’s how things work on my side and what I need from the backend:
+Hey Krishna, here’s how things work on my side and what I need from the backend:
 
 ---
 
@@ -33,7 +33,21 @@ Here’s the new flow I’m aiming for:
 {
   "userId": "1234567890",
   "matchStats": [
-    { "player": "Player1", "goals": 1, "assists": 2 },
-    { "player": "Player2", "goals": 0, "assists": 1 }
+    {
+      "username": "Player1",
+      "userId": "1234567890",
+      "goals": 1,
+      "assists": 2,
+      "cleanSheets": 0,
+      "teamEmoji": ":liverpool:"
+    },
+    {
+      "username": "Player2",
+      "userId": "1234567890",
+      "goals": 2,
+      "assists": 0,
+      "cleanSheets": 0,
+      "teamEmoji": ":barcelona:"
+    }
   ]
 }
