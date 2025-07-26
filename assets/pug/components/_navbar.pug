@@ -6,7 +6,7 @@ nav.navbar.navbar-expand-lg
       span
       span
       span
-    .collapse.navbar-collapse#navbarNav
+    .collapse.navbar-collapse.justify-content-between#navbarNav
       ul.navbar-nav
         li.nav-item
           a.nav-link.active(href="index.html", aria-current="page") Home
@@ -14,3 +14,12 @@ nav.navbar.navbar-expand-lg
           a.nav-link(href="top-players.html") Top Players
         li.nav-item
           a.nav-link(href="rule-book.html") Rule Book
+      ul.navbar-nav
+        li.nav-item
+          a.btn.btn-outline-light#login-btn
+            i.bi.bi-discord.pe-3
+            | Sign in
+        li.nav-item
+          a.btn.btn-outline-danger#logout-btn
+            i.bi.bi-box-arrow-in-right.pe-3
+            | Log out
