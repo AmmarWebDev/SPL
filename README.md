@@ -1,7 +1,7 @@
 <div style="display: flex; justify-content: center; align-items: center;">
-  <img src="static/images/logo.png" alt="Alt Text" width="50"/>
+  <img src="https://spl-league.web.app/assets/images/logo.png" alt="Alt Text" width="50"/>
   <span style="margin: 0 10px; font-size: 2rem;">SPL League Official Website</span>
-  <img src="static/images/logo.png" alt="Alt Text" width="50"/>
+  <img src="https://spl-league.web.app/assets/images/logo.png" alt="Alt Text" width="50"/>
 </div>
 
 <center style="font-weight: bold;">

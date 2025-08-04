@@ -1,6 +1,8 @@
 import pandas as pd
 from collections import Counter
 
+BASE_URL = '../client/public/database'
+
 def check_duplicate_user_ids_within_files(file_list):
   for file in file_list:
     print(f"🔍 Checking file: {file}")  # 👈 debug print
@@ -24,4 +26,4 @@ def check_duplicate_user_ids_within_files(file_list):
     except Exception as e:
       print(f"❌ Error reading {file}: {e}")
 
-check_duplicate_user_ids_within_files(['../public/database/spl-cwc-records.csv', '../public/database/spl-euros-records.csv'])
+check_duplicate_user_ids_within_files([f'{BASE_URL}/spl-cwc-records.csv', f'{BASE_URL}/spl-euros-records.csv'])
