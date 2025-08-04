@@ -1,0 +1,23 @@
+{
+  "name": "spl",
+  "version": "1.3.0",
+  "description": "",
+  "homepage": "https://github.com/AmmarWebDev/SPL#readme",
+  "bugs": {
+    "url": "https://github.com/AmmarWebDev/SPL/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmmarWebDev/SPL.git"
+  },
+  "license": "MIT",
+  "author": "Miro",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0"
+  }
+}

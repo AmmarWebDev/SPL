@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+  head
+    include meta-data/_head.pug
+    title SPL | Home
+    //- custom CSS
+    link(rel="stylesheet", href="assets/css/index.min.css")
+  body(data-bs-theme="dark")
+    //- NAVBAR -//
+    include components/_navbar.pug
+
+    //- LANDING -//
+    section.landing
+      .wallpapers
+        picture.wallpaper-img.active
+          source(srcset="assets/images/landing-wallpaper1.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper1.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper1.jpg", alt="Wallpaper 1", loading="eager")
+        picture.wallpaper-img
+          source(srcset="assets/images/landing-wallpaper2.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper2.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper2.jpg", alt="Wallpaper 2", loading="lazy")
+        picture.wallpaper-img
+          source(srcset="assets/images/landing-wallpaper3.avif", type="image/avif")
+          source(srcset="assets/images/landing-wallpaper3.webp", type="image/webp")
+          img(src="assets/images/landing-wallpaper3.jpg", alt="Wallpaper 3", loading="lazy")
+
+      .overlay
+      .container.d-flex.justify-content-center.align-items-center(style="height: 100vh")
+        .content.d-flex.flex-column.w-100
+          .logo.text-center.mb-4
+            img.main-logo-spin(src="assets/images/logo.png", alt="logo", width="150px")
+          .buttons.d-flex.gap-3.flex-wrap.m-auto.justify-content-center
+            a.btn.btn-primary.btn-lg.fs-5.d-flex.align-items-center.justify-content-center(href="https://discord.gg/55YqBbkMbZ", target="_blank", style="background-color: #6e57f1")
+              i.bi.bi-discord.pe-3
+              | Discord
+              i.bi.bi-box-arrow-up-right.ps-3
+            a.btn.btn-primary.btn-lg.fs-5.d-flex.align-items-center.justify-content-center(href="https://www.roblox.com/games/89831239593711/TESTING-SPL-Hub#!/about", target="_blank", style="background-color: #656565")
+              img.pe-3(src="assets/svg/roblox-icon.svg", width="40")
+              | SPL Hub
+              i.bi.bi-box-arrow-up-right.ps-3
+
+    //- axios
+    script(src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js")
+    //- main js file
+    script(src="assets/js/main.min.js", type="module")
+    //- custom JS
+    script(src="assets/js/index.min.js", type="module")

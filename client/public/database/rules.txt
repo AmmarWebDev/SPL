@@ -1,0 +1,99 @@
+If a defender passes to their goalkeeper and the goalkeeper picks up the ball, it's considered a pass back, which results in a penalty.
+
+If any player pulls, it will result in an auto warning.
+
+If you're the last man and you slide tackle or pull a player, you will get an auto red card for 1 leg.
+
+A normal match has 2 legs. The first leg has no extra time or penalties. The second leg can and will have extra time and/or penalties if needed.
+
+A forfeit will result in the opposite team getting 3 extra points if you don't have your 6 players for a league match.
+
+At half time in every leg, you get 2 minutes to go to your team locker room and discuss. (Your decision on doing locker room or not.)
+
+If you vote to kick a teammate, that will result in an extra point/goal for the opposite team.
+
+Regular games are 6v6 or 7v7, with 1 ref and 1 VAR.
+
+A team can forfeit if they have fewer than 5 players or be punished for not following the ref or the rules.
+
+If there's an active competition, there will be 2–3 games per day depending on the round. You must wait 10 minutes after a game ends for the next one to start.
+
+If your players are late for a substitution, we won’t help you—it’s not our responsibility.
+
+If your goalkeeper leaves, we can’t do anything about it. It’s your responsibility to manage it.
+
+If you want to sub, do it while the game continues. We won’t pause the game as it disrupts the opponent.
+
+If one of your players gets caught not signing a player, it's either a rematch or other consequences the staff will decide. (This won’t cause a ban or kick.)
+
+If the ball crosses the goal line, it counts as a goal.
+
+If your manager joins the match but isn’t willing to play, they must leave or be punished, or the match will be postponed.
+
+Using commands in the private server during a league match will result in a 1–10 match ban depending on abuse level. (Includes refs and staff.)
+
+If you want to push back the date, ask the opposing manager and provide a screenshot as proof. Without it, staff can’t help.
+
+If you slide or pull someone, it’s a warning unless it’s a last-man situation or your second foul—then it’s a yellow card.
+
+Your third foul in a league match results in a red card.
+
+Once your team is in the game, you get at least 5 minutes to warm up.
+
+A commentator CANNOT ref the game and can only commentate (unless the ref wants to commentate and there are no commentators).
+
+If y’all are complaining about something not being offside, we cannot do anything—blame RF24 for their game.
+
+If the ref makes a mistake due to not knowing the rules, we can’t fix the result unless both teams agree to a rematch. (The ref will be punished for bad decisions.)
+
+Anyone on the server has the right to report a ref for bad decisions if they have evidence.
+
+If the ball glitches onto your body after a throw-in, it will be a kickoff to avoid wasting time. (Time won’t change.)
+
+If someone kicks the ball into the goal while it was lagging, it’s no goal—goalkeeper couldn't react. Goal kick.
+
+If you have a celebration glitch after scoring, fix it or your next goal won’t count.
+
+If the ball glitches or disappears, it’s a kickoff, not a free kick (to save time).
+
+In the 1st leg, the home team takes kickoff in the first half, away team in the second. In the 2nd leg, the away team kicks off first, home team second. If not followed, we will decide the punishment (not including bans or kicks).
+
+Before the match starts, give staff the Discord users from your lineup so we can verify they’re signed.
+
+Bribing a ref will get your team disbanded and placed at the bottom of the league.
+
+Being toxic or trash-talking results in a 30-minute timeout (not for messages that don’t hurt or disrespect).
+
+If the ref rules offside, it stands. Auto VAR handles offside. If they don’t fix it, they’ll be punished.
+
+Passing to yourself on a throw-in is illegal (auto-pass). Yellow card. If it leads to a goal, it's ruled out and still a yellow.
+
+Same with free kicks—passing to yourself is illegal (auto-pass). Yellow card if it leads to a goal as well.
+
+If your team touches the ball during opponent’s kickoff, the player gets a yellow card.
+
+Shooting directly from kickoff is a yellow card. If it results in a goal, it's disallowed and still a yellow.
+
+If a player is AFK mid-game, they’ll be subbed off and can’t return unless you choose to sub them back on.
+
+If a goalkeeper catches a ball outside the goal line but it ends up inside, it doesn't count due to animation (not GK's fault).
+
+Signing players during a match gives the opposing team +1 goal.
+
+If an unsigned player scores or assists, the action is disallowed.
+
+Emergency signings (within 30 mins before a league match) result in +1 for every signed player.
+
+If Peerless or Hybrid is down, managers have 7 days to sign players if their roster is under 10.
+
+If a manager forfeits twice, they’re disbanded and can't post ads in the scout channel.
+
+Posting team ads in the free agent channel = warning. Repeated offense = punishment.
+
+If there aren’t many matches on Friday, teams that previously faced can rematch—must schedule it before Friday.
+
+Postponing a match to next weekend isn’t allowed unless approved by a high-ranking staff member.
+
+Managers can’t postpone more than twice. Matches must be played or both teams will be punished (due to inactivity or delays).
+
+At halftime, each manager has 1–5 minutes to make substitutions. After that, you must sub during live play.
