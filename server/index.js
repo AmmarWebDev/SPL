@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 
 // 🔐 Replace this with your real bot token (keep it secret!)
-const TOKEN = "MTM5ODI1ODI2NjQ3NTMzMTY4NQ.G-yEyF.LUGvvCWFb67wNPCqXqFpqx-OEQ5lPUhtj3a-sU";
+const TOKEN = "";
 
 // ✅ List of user IDs to look up
 const userIds = [
