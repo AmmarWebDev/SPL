@@ -184,88 +184,104 @@ function openConfirmResultModal() {
 }
 
 //! GET TOP PLAYERS //
-const csvFiles = [
-  "database/spl-cwc-records.csv",
-  "database/spl-euros-records.csv",
+const apiUrls = [
+  "http://localhost:3000/euros/top-10",
+  "http://localhost:3000/cwc/top-10",
 ];
 
-Promise.all(csvFiles.map((file) => axios.get(file)))
-  .then((responses) => {
-    responses.forEach((response, index) => {
-      const parsed = Papa.parse(response.data, {
-        header: true,
-        skipEmptyLines: true,
-      }).data;
+apiUrls.forEach((url) => {
+  axios
+    .get(url)
+    .then((res) => {
+      const players = res.data;
+      // Extract league slug from API URL
+      const parts = url.split("/");
+      const leagueSlug = parts[parts.length - 2]; // "euros" or "cwc"
+      const leagueName = leagueSlug === "cwc" ? "CWC" : "Euros";
 
-      const leagueNameMatch = csvFiles[index].match(/spl-(.*?)-records/i);
-      const leagueName = leagueNameMatch
-        ? leagueNameMatch[1].toUpperCase()
-        : "Unknown League";
-
+      // Add league title
       const h1 = document.createElement("h1");
       h1.className = "text-center mt-5";
       h1.innerHTML = `
-        <img src="assets/images/${leagueName.toLowerCase()}-logo.png" width="40" />
+        <img src="assets/images/${leagueSlug}-logo.png" width="40" />
         <span>SPL ${leagueName}</span>
-        <img src="assets/images/${leagueName.toLowerCase()}-logo.png" width="40" />
+        <img src="assets/images/${leagueSlug}-logo.png" width="40" />
       `;
       topPlayersSection.appendChild(h1);
 
-      const flatPlayers = parsed.map((p) => ({
-        Username: p.Username,
-        Goals: parseInt(p.Goals, 10) || 0,
-        Assists: parseInt(p.Assists, 10) || 0,
-      }));
+      const flatPlayers = players
+        .filter((p) => p.username)
+        .map((p) => ({
+          id: `<@${p.userId}>`,
+          username: p.username,
+          nickname: p.nickname,
+          avatar: p.avatar,
+          teamName:
+            p.teamName?.replace(/^《SPL》( *\| *)?/i, "").trim() || "Unknown",
+          teamIcon: p.teamIcon,
+          goals: parseInt(p.goals) || 0,
+          assists: parseInt(p.assists) || 0,
+        }));
 
-      const tableTopGoals = [...flatPlayers]
-        .sort((a, b) => b.Goals - a.Goals || b.Assists - a.Assists)
+      const topGoals = [...flatPlayers]
+        .sort((a, b) => b.goals - a.goals || b.assists - a.assists)
         .slice(0, 10);
 
-      const tableTopAssists = [...flatPlayers]
-        .sort((a, b) => b.Assists - a.Assists || b.Goals - a.Goals)
+      const topAssists = [...flatPlayers]
+        .sort((a, b) => b.assists - a.assists || b.goals - a.goals)
         .slice(0, 10);
 
-      const goalsTableHTML = `
-        <h2 class="text-light text-center responsive-text">
-          🏆 Top 10 ${leagueName} Goalscorers 🏆
-        </h2>
-        <table class="table table-striped table-bordered table-hover text-center w-100 my-3 mx-auto" style="max-width: 500px">
-          <thead><tr><th>Username</th><th>Goals</th></tr></thead>
-          <tbody>
-            ${tableTopGoals
-              .map(
-                (p) => `
+      const generateTableHTML = (title, data, type) => {
+        const label = type === "goals" ? "Goals" : "Assists";
+        return `
+          <h2 class="text-light text-center responsive-text">🏆 Top 10 ${leagueName} ${label} 🏆</h2>
+          <table class="table table-striped table-bordered table-hover text-center w-100 my-3 mx-auto" style="max-width: 600px">
+            <thead>
               <tr>
-                <td>${p.Username}</td>
-                <td>${p.Goals}</td>
+                <th>Player</th>
+                <th>Team</th>
+                <th>${label}</th>
               </tr>
-            `
-              )
-              .join("")}
-          </tbody>
-        </table>
-      `;
+            </thead>
+            <tbody>
+              ${data
+                .map(
+                  (p) => `
+                <tr>
+                  <td class="align-middle text-center">
+                    <div class="d-flex align-items-center justify-between gap-2">
+                      <img src="${
+                        p.avatar
+                      }" width="32" height="32" style="border-radius: 50%" />
+                      <span class="w-100">${p.username}</span>
+                    </div>
+                  </td>
+                  <td class="align-middle text-center">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                      <span>${p.teamName}</span>
+                      ${
+                        p.teamIcon
+                          ? `<img src="${p.teamIcon}" width="20" height="20" />`
+                          : ""
+                      }
+                    </div>
+                  </td>
+                  <td class="align-middle text-center">${p[type]}</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+          </table>
+        `;
+      };
 
-      const assistsTableHTML = `
-        <h2 class="text-light text-center responsive-text">
-          🏆 Top 10 ${leagueName} Assisters 🏆
-        </h2>
-        <table class="table table-striped table-bordered table-hover text-center w-100 my-3 mx-auto" style="max-width: 500px">
-          <thead><tr><th>Username</th><th>Assists</th></tr></thead>
-          <tbody>
-            ${tableTopAssists
-              .map(
-                (p) => `
-              <tr>
-                <td>${p.Username}</td>
-                <td>${p.Assists}</td>
-              </tr>
-            `
-              )
-              .join("")}
-          </tbody>
-        </table>
-      `;
+      const goalsTableHTML = generateTableHTML("Goals", topGoals, "goals");
+      const assistsTableHTML = generateTableHTML(
+        "Assists",
+        topAssists,
+        "assists"
+      );
 
       topPlayersSection.insertAdjacentHTML(
         "beforeend",
@@ -277,44 +293,23 @@ Promise.all(csvFiles.map((file) => axios.get(file)))
       `
       );
 
-      const grouped = {};
-      parsed.forEach((p) => {
-        const id = p["User ID"]?.trim()
-          ? `<@${p["User ID"].trim()}>`
-          : `@${p.Username}`;
-        const emoji = p["Team Emoji"] || "";
-        const key = id + "||" + emoji;
-        if (!grouped[key]) grouped[key] = { id, emoji, Goals: 0, Assists: 0 };
-        grouped[key].Goals += parseInt(p.Goals, 10) || 0;
-        grouped[key].Assists += parseInt(p.Assists, 10) || 0;
-      });
-      const groupedList = Object.values(grouped);
-
-      const summaryTopGoals = [...groupedList]
-        .sort((a, b) => b.Goals - a.Goals || b.Assists - a.Assists)
-        .slice(0, 10);
-
-      const summaryTopAssists = [...groupedList]
-        .sort((a, b) => b.Assists - a.Assists || b.Goals - a.Goals)
-        .slice(0, 10);
-
       const summaryLines = [];
       summaryLines.push(`# SPL ${leagueName} Top 10 Scorers Till Now:`);
-      summaryTopGoals.forEach((p, i) => {
-        if (p.Goals > 0) {
-          const label = p.Goals === 1 ? "goal" : "goals";
+      topGoals.forEach((p, i) => {
+        if (p.goals > 0) {
+          const label = p.goals === 1 ? "goal" : "goals";
           summaryLines.push(
-            `### ${i + 1}. ${p.id} ${p.emoji}: ${p.Goals} ${label}`
+            `### ${i + 1}. ${p.id} (${p.teamName}): ${p.goals} ${label}`
           );
         }
       });
 
       summaryLines.push(`\n# SPL ${leagueName} Top 10 Assistors Till Now:`);
-      summaryTopAssists.forEach((p, i) => {
-        if (p.Assists > 0) {
-          const label = p.Assists === 1 ? "assist" : "assists";
+      topAssists.forEach((p, i) => {
+        if (p.assists > 0) {
+          const label = p.assists === 1 ? "assist" : "assists";
           summaryLines.push(
-            `### ${i + 1}. ${p.id} ${p.emoji}: ${p.Assists} ${label}`
+            `### ${i + 1}. ${p.id} (${p.teamName}): ${p.assists} ${label}`
           );
         }
       });
@@ -336,14 +331,15 @@ Promise.all(csvFiles.map((file) => axios.get(file)))
             copyBtn.textContent = "❌ Failed to Copy";
           });
       });
+
       topPlayersSection.appendChild(copyBtn);
 
-      if (index < responses.length - 1) {
+      if (url !== apiUrls[apiUrls.length - 1]) {
         topPlayersSection.insertAdjacentHTML(
           "beforeend",
           `<hr class="border-white border-2 opacity-100" style="margin:70px 0;" />`
         );
       }
-    });
-  })
-  .catch((err) => console.error("Error loading CSVs:", err));
+    })
+    .catch((err) => console.error("Error fetching API:", err));
+});
