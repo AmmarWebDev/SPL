@@ -170,12 +170,10 @@ app.get("/player/:userId", async (req, res) => {
     const [enriched] = await enrichTopPlayers([combinedPlayer]);
     res.json(enriched);
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to fetch and combine player data",
-        error: err.message,
-      });
+    res.status(500).json({
+      message: "Failed to fetch and combine player data",
+      error: err.message,
+    });
   }
 });
 
@@ -215,12 +213,10 @@ app.post("/:competition", async (req, res) => {
       .json({ message: `Player stats saved (${competition})`, player });
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({
-        message: `Failed to save stats for ${competition}`,
-        error: err.message,
-      });
+    res.status(500).json({
+      message: `Failed to save stats for ${competition}`,
+      error: err.message,
+    });
   }
 });
 
@@ -348,6 +344,18 @@ const parseAndSendStats = async (msg, endpoint) => {
 
   return successCount;
 };
+
+// To keep the bot awake in Replit
+app.get("/", (_, res) => res.send("Bot is alive"));
+
+// Check if the bot is awake
+client.on("messageCreate", (message) => {
+  if (message.author.bot) return;
+
+  if (message.content.toLowerCase() === "are you alive my boy") {
+    message.channel.send("yessir!");
+  }
+});
 
 // Start bot and server
 client.login(process.env.DISCORD_TOKEN).then(() => {
