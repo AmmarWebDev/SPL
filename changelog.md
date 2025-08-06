@@ -1,7 +1,7 @@
 # Changelogs:
 ## v1.3.1:
 ### - fixed the logo sometimes not showing in the 404 page
-### - preparing for v1.4.0
+### - preparing for v2.0.0
 ## v1.3.0:
 ### - deleted the suffix `.html` in all webpages
 ### - now the loading speed is incredibly fast 🚀
