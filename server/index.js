@@ -80,12 +80,12 @@ const enrichTopPlayers = async (players) => {
   return enriched;
 };
 
-const getTop10 = (players) =>
-  [...players]
-    .sort((a, b) => b.goals - a.goals || b.assists - a.assists)
-    .slice(0, 10);
+const getTop10 = (players, statType = "goals") =>
+  [...players].sort((a, b) => b[statType] - a[statType]).slice(0, 10);
 
 // Endpoints
+
+// All players (raw dump) — still useful
 app.get("/euros", async (req, res) => {
   try {
     const players = await Euro.find({});
@@ -110,32 +110,37 @@ app.get("/cwc", async (req, res) => {
   }
 });
 
-app.get("/euros/top-10", async (req, res) => {
+// ✅ DRY: Dynamic top scorer/assister/cleansheet route
+app.get("/:competition/top-:statType", async (req, res) => {
+  const { competition, statType } = req.params;
+  const validStats = ["goals", "assists", "cleansheets"];
+  const models = { euros: Euro, cwc: Cwc };
+
+  if (!validStats.includes(statType)) {
+    return res.status(400).json({ message: `Invalid stat type: ${statType}` });
+  }
+
+  const Model = models[competition.toLowerCase()];
+  if (!Model) {
+    return res
+      .status(404)
+      .json({ message: `Unknown competition: ${competition}` });
+  }
+
   try {
-    const players = await Euro.find({});
-    const topPlayers = getTop10(players);
+    const players = await Model.find({});
+    const topPlayers = getTop10(players, statType);
     const enriched = await enrichTopPlayers(topPlayers);
     res.json(enriched);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch top 10 Euros", error: err.message });
+    res.status(500).json({
+      message: `Failed to fetch top ${statType} for ${competition}`,
+      error: err.message,
+    });
   }
 });
 
-app.get("/cwc/top-10", async (req, res) => {
-  try {
-    const players = await Cwc.find({});
-    const topPlayers = getTop10(players);
-    const enriched = await enrichTopPlayers(topPlayers);
-    res.json(enriched);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch top 10 CWC", error: err.message });
-  }
-});
-
+// Individual player search
 app.get("/player/:userId", async (req, res) => {
   const { userId } = req.params;
 
@@ -169,7 +174,7 @@ app.get("/player/:userId", async (req, res) => {
   }
 });
 
-// POST endpoint
+// POST endpoint to update stats
 app.post("/:competition", async (req, res) => {
   const { competition } = req.params;
   const { userId, goals = 0, assists = 0, cleansheets = 0, teamId } = req.body;
@@ -204,12 +209,10 @@ app.post("/:competition", async (req, res) => {
       .json({ message: `Player stats saved (${competition})`, player });
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({
-        message: `Failed to save stats for ${competition}`,
-        error: err.message,
-      });
+    res.status(500).json({
+      message: `Failed to save stats for ${competition}`,
+      error: err.message,
+    });
   }
 });
 
@@ -221,6 +224,6 @@ app.get("/health", (_, res) => {
 // Start the server *after* logging into Discord
 client.login(process.env.DISCORD_TOKEN).then(() => {
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port:${PORT}`);
   });
 });
