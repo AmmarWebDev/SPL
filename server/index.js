@@ -5,7 +5,7 @@ const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const Euro = require("./models/euros.model");
 const Cwc = require("./models/cwc.model");
 
-dotenv.config({ path: require("path").resolve(__dirname, "../.env") });
+dotenv.config();
 
 const app = express();
 app.use(express.json());
