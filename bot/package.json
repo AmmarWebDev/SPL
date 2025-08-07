@@ -1,0 +1,25 @@
+{
+  "name": "spl-bot",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AmmarWebDev/SPL#readme",
+  "bugs": {
+    "url": "https://github.com/AmmarWebDev/SPL/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmmarWebDev/SPL.git"
+  },
+  "license": "MIT",
+  "author": "Miro",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.2.1"
+  }
+}

@@ -3,6 +3,7 @@
     "Ammar",
     "autoprefixer",
     "classnames",
+    "cleansheets",
     "Elems",
     "fargs",
     "fnames",
@@ -15,6 +16,7 @@
     "Replit",
     "styl",
     "toplevel",
-    "typeofs"
+    "typeofs",
+    "yessir"
   ]
 }
