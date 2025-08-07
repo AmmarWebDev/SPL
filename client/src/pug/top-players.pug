@@ -7,58 +7,10 @@ html(lang="en")
     //- NAVBAR -//
     include components/_navbar.pug
 
-    //- MODALS -//
-    //- add new result modal
-    .modal.fade#add-result-modal(tabindex='-1', aria-labelledby='add-result-modal-label', aria-hidden='true')
-      .modal-dialog.modal-dialog-centered
-        .modal-content
-          .modal-header
-            h1.modal-title.fs-5#add-result-modal-label Add New Result
-            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
-          .modal-body
-            form
-              .mb-3
-                label.col-form-label(for='league-name') League:
-                select#league-name.form-select
-                  option(value="cwc") CWC
-                  option(value="euros") Euros
-              .mb-3
-                label.col-form-label(for='match-result') Match Result:
-                textarea#match-result.form-control(placeholder='Put the match template...', style='min-height: 300px')
-          .modal-footer
-            button.btn.btn-dark(type='button', data-bs-dismiss='modal')
-              | Close
-            button.btn.btn-light#submit-result-btn(type='button', onclick="openConfirmResultModal()")
-              | Submit
-
-    //- confirm new result modal
-    .modal.fade#confirm-result-modal(tabindex='-1', aria-labelledby='confirm-result-modal-label', aria-hidden='true')
-      .modal-dialog.modal-dialog-centered
-        .modal-content
-          .modal-header
-            h1.modal-title.fs-5#confirm-result-modal-label Are you sure?
-            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
-          .modal-body
-            p#confirm-result-modal-body.text-capitalize
-          .modal-footer
-            button.btn.btn-dark(type='button', data-bs-dismiss='modal')
-              | Cancel
-            button.btn.btn-danger#submit-result-btn(type='button', data-bs-toggle="modal", data-bs-target="#confirm-result-modal")
-              | Confirm
-
-
-    //- ADD MATCH RESULTS -//
-    .container
-      a.btn.btn-outline-info.d-block.ms-auto.me-5.mt-4#add-result-btn(style="width: fit-content", data-bs-toggle="modal", data-bs-target="#add-result-modal", type="button")
-        i.bi.bi-plus-lg.pe-2
-        | Add New Result
-
     //- TOP PLAYERS -//
     section#top-players.container
       //- will be populated with js
 
-    //- markdown it
-    script(src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js")
     //- axios
     script(src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js")
     //- main js file
