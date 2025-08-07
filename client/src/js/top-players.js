@@ -15,20 +15,37 @@ document
 const leagues = ["cwc", "euros"];
 const statTypes = ["goals", "assists"];
 
-leagues.forEach((leagueSlug, index) => {
+// Inject responsive CSS for table scrolling
+(function addResponsiveStyles() {
+  const css = `
+    @media (max-width: 576px) {
+      .table-responsive {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+      .table-responsive table {
+        width: auto;
+        max-width: none;
+      }
+      .table-responsive td, 
+      .table-responsive th {
+        white-space: nowrap;
+      }
+      .player-info-cell {
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  `;
+  const style = document.createElement("style");
+  style.appendChild(document.createTextNode(css));
+  document.head.appendChild(style);
+})();
+
+leagues.forEach((leagueSlug, leagueIndex) => {
   const leagueName = leagueSlug === "cwc" ? "CWC" : "Euros";
 
-  // Add league title
-  const h1 = document.createElement("h1");
-  h1.className = "text-center mt-5";
-  h1.innerHTML = `
-    <img src="assets/images/${leagueSlug}-logo.png" width="40" />
-    <span>SPL ${leagueName}</span>
-    <img src="assets/images/${leagueSlug}-logo.png" width="40" />
-  `;
-  topPlayersSection.appendChild(h1);
-
-  // Fetch goals and assists concurrently
   Promise.all(
     statTypes.map((type) =>
       axios.get(
@@ -37,10 +54,24 @@ leagues.forEach((leagueSlug, index) => {
     )
   )
     .then(([goalsRes, assistsRes]) => {
+      // Container for league section
+      const leagueContainer = document.createElement("div");
+      leagueContainer.className = "league-section";
+
+      // League Heading
+      const h1 = document.createElement("h1");
+      h1.className = "text-center mt-5";
+      h1.innerHTML = `
+        <img src="assets/images/${leagueSlug}-logo.png" width="40" />
+        <span>SPL ${leagueName}</span>
+        <img src="assets/images/${leagueSlug}-logo.png" width="40" />
+      `;
+      leagueContainer.appendChild(h1);
+
+      // Player formatter (with fallback)
       const formatPlayer = (p) => ({
         id: `<@${p.userId}>`,
-        username: p.username,
-        nickname: p.nickname,
+        username: p.username || `<@${p.userId}>`,
         avatar: p.avatar,
         teamName:
           p.teamName?.replace(/^《SPL》( *\| *)?/i, "").trim() || "Unknown",
@@ -49,26 +80,21 @@ leagues.forEach((leagueSlug, index) => {
         assists: parseInt(p.assists) || 0,
       });
 
-      const topGoals = goalsRes.data
-        .filter((p) => p.username)
-        .map(formatPlayer)
-        .slice(0, 10);
-      const topAssists = assistsRes.data
-        .filter((p) => p.username)
-        .map(formatPlayer)
-        .slice(0, 10);
+      // Always take the top 10, no filter
+      const topGoals = goalsRes.data.map(formatPlayer).slice(0, 10);
+      const topAssists = assistsRes.data.map(formatPlayer).slice(0, 10);
 
-      const generateTableHTML = (title, data, type) => {
-        const label = type === "goals" ? "Goals" : "Assists";
-        return `
-          <h2 class="text-light text-center responsive-text">🏆 Top 10 ${leagueName} ${label} 🏆</h2>
-          <table class="table table-striped table-bordered table-hover text-center w-100 my-3 mx-auto" style="max-width: 600px">
+      // Table generator
+      const generateTableHTML = (label, data, key) => `
+        <h2 class="text-light text-center responsive-text">🏆 Top 10 ${leagueName} ${label} 🏆</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover text-center my-3">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Player</th>
-                <th>Team</th>
-                <th>${label}</th>
+                <th class="rank-col">#</th>
+                <th class="player-col">Player</th>
+                <th class="team-col">Team</th>
+                <th class="stat-col">${label}</th>
               </tr>
             </thead>
             <tbody>
@@ -76,17 +102,17 @@ leagues.forEach((leagueSlug, index) => {
                 .map(
                   (p, i) => `
                 <tr>
-                  <td class="align-middle">${i + 1}.</td>
-                  <td class="align-middle text-center">
-                    <div class="d-flex align-items-center justify-between gap-2">
+                  <td class="align-middle rank-col">${i + 1}.</td>
+                  <td class="align-middle player-col player-info-cell">
+                    <div class="d-flex align-items-center gap-2">
                       <img src="${
                         p.avatar
-                      }" width="32" height="32" style="border-radius: 50%" />
+                      }" width="32" height="32" style="border-radius:50%" />
                       <span class="w-100">${p.username}</span>
                     </div>
                   </td>
-                  <td class="align-middle text-center">
-                    <div class="d-flex align-items-center justify-content-center gap-2">
+                  <td class="align-middle team-col player-info-cell">
+                    <div class="d-flex align-items-center gap-2 justify-content-center">
                       <span>${p.teamName}</span>
                       ${
                         p.teamIcon
@@ -95,80 +121,68 @@ leagues.forEach((leagueSlug, index) => {
                       }
                     </div>
                   </td>
-                  <td class="align-middle text-center">${p[type]}</td>
+                  <td class="align-middle stat-col">${p[key]}</td>
                 </tr>
               `
                 )
                 .join("")}
             </tbody>
           </table>
-        `;
-      };
-
-      const goalsTableHTML = generateTableHTML("Goals", topGoals, "goals");
-      const assistsTableHTML = generateTableHTML(
-        "Assists",
-        topAssists,
-        "assists"
-      );
-
-      topPlayersSection.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div class="row">
-          <div class="col-12 col-lg-6">${goalsTableHTML}</div>
-          <div class="col-12 col-lg-6">${assistsTableHTML}</div>
         </div>
-      `
+      `;
+
+      // Insert goals & assists side by side
+      leagueContainer.insertAdjacentHTML(
+        "beforeend",
+        `<div class="row">
+          <div class="col-12 col-lg-6">${generateTableHTML(
+            "Goals",
+            topGoals,
+            "goals"
+          )}</div>
+          <div class="col-12 col-lg-6">${generateTableHTML(
+            "Assists",
+            topAssists,
+            "assists"
+          )}</div>
+        </div>`
       );
 
+      // Build summary text
       const summaryLines = [];
       summaryLines.push(`# SPL ${leagueName} Top 10 Scorers Till Now:`);
       topGoals.forEach((p, i) => {
-        if (p.goals > 0) {
-          const label = p.goals === 1 ? "goal" : "goals";
-          summaryLines.push(
-            `### ${i + 1}. ${p.id} (${p.teamName}): ${p.goals} ${label}`
-          );
-        }
+        const lbl = p.goals === 1 ? "goal" : "goals";
+        summaryLines.push(
+          `### ${i + 1}. ${p.id} (${p.teamName}): ${p.goals} ${lbl}`
+        );
       });
-
       summaryLines.push(`\n# SPL ${leagueName} Top 10 Assistors Till Now:`);
       topAssists.forEach((p, i) => {
-        if (p.assists > 0) {
-          const label = p.assists === 1 ? "assist" : "assists";
-          summaryLines.push(
-            `### ${i + 1}. ${p.id} (${p.teamName}): ${p.assists} ${label}`
-          );
-        }
+        const lbl = p.assists === 1 ? "assist" : "assists";
+        summaryLines.push(
+          `### ${i + 1}. ${p.id} (${p.teamName}): ${p.assists} ${lbl}`
+        );
       });
 
+      // Copy button
       const copyBtn = document.createElement("button");
       copyBtn.className = "btn btn-primary my-4 d-block mx-auto";
       copyBtn.textContent = `📋 Copy SPL ${leagueName} Summary`;
       copyBtn.addEventListener("click", () => {
         navigator.clipboard
           .writeText(summaryLines.join("\n"))
-          .then(() => {
-            copyBtn.textContent = "✅ Copied!";
-            setTimeout(() => {
-              copyBtn.textContent = `📋 Copy SPL ${leagueName} Summary`;
-            }, 2000);
-          })
-          .catch((err) => {
-            console.error("Copy failed", err);
-            copyBtn.textContent = "❌ Failed to Copy";
-          });
-      });
-
-      topPlayersSection.appendChild(copyBtn);
-
-      if (index !== leagues.length - 1) {
-        topPlayersSection.insertAdjacentHTML(
-          "beforeend",
-          `<hr class="border-white border-2 opacity-100" style="margin:70px 0;" />`
+          .then(() => (copyBtn.textContent = "✅ Copied!"))
+          .catch(() => (copyBtn.textContent = "❌ Failed to Copy"));
+        setTimeout(
+          () => (copyBtn.textContent = `📋 Copy SPL ${leagueName} Summary`),
+          2000
         );
-      }
+      });
+      leagueContainer.appendChild(copyBtn);
+
+      // Append the complete league block
+      topPlayersSection.appendChild(leagueContainer);
     })
     .catch((err) => console.error("Error fetching API:", err));
 });
