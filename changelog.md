@@ -1,4 +1,6 @@
 # Changelogs:
+## v2.0.1:
+### - Restore the `rule-book` page again
 ## v2.0.0:
 ### - Introduced a dedicated back-end server to power the platform
 ### - Integrated a real database for persistent and scalable data storage

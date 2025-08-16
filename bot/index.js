@@ -1,4 +1,11 @@
-const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const {
+  Client,
+  GatewayIntentBits,
+  Partials,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} = require("discord.js");
 const axios = require("axios");
 const dotenv = require("dotenv");
 
@@ -55,91 +62,176 @@ client.on("messageCreate", async (message) => {
       return message.reply("❌ Unknown channel name format.");
     }
 
-    const playerCount = await parseAndSendStats(fetchedMessage, targetEndpoint);
-    message.reply(
-      `✅ Recorded stats for ${playerCount} player${
-        playerCount !== 1 ? "s" : ""
-      }.`
+    const players = await parsePlayerStats(fetchedMessage);
+
+    // Build request payload
+    const requestPayload = players.map((p) => ({
+      userId: p.userId,
+      goals: p.goals,
+      assists: p.assists,
+      cleansheets: p.cleansheets,
+      teamId: p.teamId,
+    }));
+
+    // Log JSON to console before sending
+    console.log("📦 Request payload:", JSON.stringify(requestPayload, null, 2));
+
+    // Build no-ping preview
+    let previewText = requestPayload
+      .map(
+        (p, i) =>
+          `${i + 1}. <@${p.userId}>\nGoals: ${p.goals}, Assists: ${
+            p.assists
+          }, Clean Sheets: ${p.cleansheets}`
+      )
+      .join("\n\n");
+
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setCustomId("confirm")
+        .setLabel("✅ Confirm")
+        .setStyle(ButtonStyle.Success),
+      new ButtonBuilder()
+        .setCustomId("cancel")
+        .setLabel("❌ Cancel")
+        .setStyle(ButtonStyle.Danger)
     );
+
+    const previewMsg = await message.reply({
+      content:
+        "📝 **Here’s a preview of the stats that will be sent.**\nClick ✅ to confirm or ❌ to cancel.\n\n" +
+        previewText,
+      allowedMentions: { parse: [] },
+      components: [row],
+    });
+
+    const filter = (interaction) =>
+      ["confirm", "cancel"].includes(interaction.customId) &&
+      interaction.user.id === message.author.id;
+
+    const collector = previewMsg.createMessageComponentCollector({
+      filter,
+      time: 60000,
+    });
+
+    collector.on("collect", async (interaction) => {
+      if (interaction.customId === "confirm") {
+        let successCount = 0;
+
+        for (const p of requestPayload) {
+          try {
+            console.log("📤 Sending to API:", p);
+
+            const res = await axios.post(
+              `https://spl-production.up.railway.app/${targetEndpoint}`,
+              p
+            );
+
+            console.log("📥 API Response:", res.data);
+            successCount++;
+          } catch (err) {
+            console.error(`❌ Failed to post for ${p.userId}:`, err.message);
+          }
+        }
+
+        await interaction.update({
+          content: `✅ Successfully recorded stats for ${successCount} player${
+            successCount !== 1 ? "s" : ""
+          }.`,
+          components: [],
+        });
+      } else if (interaction.customId === "cancel") {
+        await interaction.update({
+          content: "❌ Stats recording cancelled.",
+          components: [],
+        });
+      }
+    });
+
+    collector.on("end", async (collected) => {
+      if (collected.size === 0) {
+        await previewMsg.edit({
+          content: "⌛ Timed out. Stats recording cancelled.",
+          components: [],
+        });
+      }
+    });
   } catch (err) {
     console.error("Error processing message:", err);
     message.reply("❌ Failed to fetch or parse the message.");
   }
 });
 
-const parseAndSendStats = async (msg, endpoint) => {
+const parsePlayerStats = async (msg) => {
   const lines = msg.content.split("\n");
-
-  const goalRegex = /<@(\d+)>.*?(<:Goal:)/g;
-  const assistRegex = /<@(\d+)>.*?(<:Assist:)/g;
-  const cleanSheetRegex = /<:.*?:(\d+)> ✅/g;
-  const teamMentionRegex = /<@&(\d+)>/g;
 
   const goals = {};
   const assists = {};
   const cleanSheets = new Set();
   const teamRoles = [];
 
+  const teamMentionRegex = /<@&(\d+)>/g;
   for (const match of msg.content.matchAll(teamMentionRegex)) {
     teamRoles.push(match[1]);
   }
 
   for (const line of lines) {
-    let match;
-    while ((match = goalRegex.exec(line)) !== null) {
-      const userId = match[1];
-      goals[userId] = (goals[userId] || 0) + 1;
+    const goalMatch = line.match(/<@!?(\d+)>/);
+    if (goalMatch) {
+      const userId = goalMatch[1];
+      const goalCount =
+        (line.match(/⚽/g) || []).length +
+        (line.match(/<:Goal:\d+>/g) || []).length;
+      if (goalCount > 0) {
+        goals[userId] = (goals[userId] || 0) + goalCount;
+      }
     }
   }
 
   for (const line of lines) {
-    let match;
-    while ((match = assistRegex.exec(line)) !== null) {
-      const userId = match[1];
-      assists[userId] = (assists[userId] || 0) + 1;
+    const assistMatch = line.match(/<@!?(\d+)>/);
+    if (assistMatch) {
+      const userId = assistMatch[1];
+      const assistCount =
+        (line.match(/👟/g) || []).length +
+        (line.match(/<:Assist:\d+>/g) || []).length;
+      if (assistCount > 0) {
+        assists[userId] = (assists[userId] || 0) + assistCount;
+      }
     }
   }
 
+  const cleanSheetRegex = /<:.*?:(\d+)> ✅/g;
   let match;
   while ((match = cleanSheetRegex.exec(msg.content)) !== null) {
     cleanSheets.add(match[1]);
   }
 
   const allUserIds = new Set([...Object.keys(goals), ...Object.keys(assists)]);
-  let successCount = 0;
+  const players = [];
 
   for (const userId of allUserIds) {
     const member = await msg.guild.members.fetch(userId);
     const matchingRoles = member.roles.cache.filter((role) =>
       teamRoles.includes(role.id)
     );
-
     const teamRole = matchingRoles.first();
 
-    const playerData = {
+    players.push({
       userId,
       goals: goals[userId] || 0,
       assists: assists[userId] || 0,
       cleansheets: teamRole && cleanSheets.has(teamRole.id) ? 1 : 0,
       teamId: teamRole?.id || null,
-    };
-
-    try {
-      await axios.post(`${process.env.API_BASE_URL}/${endpoint}`, playerData);
-      console.log(`✅ Posted stats for ${userId}`);
-      successCount++;
-    } catch (err) {
-      console.error(`❌ Failed to post for ${userId}:`, err.message);
-    }
+    });
   }
 
-  return successCount;
+  return players;
 };
 
-// Check if the bot is awake
+// Alive check
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
-
   if (message.content.toLowerCase() === "are you alive my boy") {
     message.channel.send("yessir!");
   }

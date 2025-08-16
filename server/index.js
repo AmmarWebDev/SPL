@@ -193,21 +193,55 @@ app.post("/:competition", async (req, res) => {
   }
 
   try {
+    console.log("📥 Incoming stats:", {
+      userId,
+      goals,
+      assists,
+      cleansheets,
+      teamId,
+    });
+
     let player = await Model.findOne({ userId });
 
     if (!player) {
-      player = new Model({ userId, goals, assists, cleansheets, teamId });
+      player = new Model({
+        userId,
+        goals: Number(goals) || 0,
+        assists: Number(assists) || 0,
+        cleansheets: Number(cleansheets) || 0,
+        teamId,
+      });
+      console.log(`🆕 New player created for ${userId}`);
     } else {
-      player.goals += goals;
-      player.assists += assists;
-      player.cleansheets += cleansheets;
-      if (teamId) player.teamId = teamId;
+      console.log("🔄 Before update:", {
+        goals: player.goals,
+        assists: player.assists,
+        cleansheets: player.cleansheets,
+        teamId: player.teamId,
+      });
+
+      // Accumulate stats safely
+      player.goals += Number(goals) || 0;
+      player.assists += Number(assists) || 0;
+      player.cleansheets += Number(cleansheets) || 0;
+
+      // Always override teamId
+      player.teamId = teamId;
+
+      console.log("✅ After update:", {
+        goals: player.goals,
+        assists: player.assists,
+        cleansheets: player.cleansheets,
+        teamId: player.teamId,
+      });
     }
 
     await player.save();
-    res
-      .status(200)
-      .json({ message: `Player stats saved (${competition})`, player });
+
+    res.status(200).json({
+      message: `Player stats saved (${competition})`,
+      player,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
